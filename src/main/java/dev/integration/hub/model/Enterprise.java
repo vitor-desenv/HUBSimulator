@@ -7,28 +7,29 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
-@Table(name = "products")
+@Table(name = "enterprise")
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class Product {
+@AllArgsConstructor
+public class Enterprise {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long companyId;
+    private String name;
 
     @Column(unique = true)
-    private String productSku;
+    private String document;
 
-    private String title;
-    private String description;
-    private String ncm;
-    private Integer stockOn;
-    private String warrantyTime;
+    private Boolean contractActive;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "enterprise")
+    private List<Department> departament;
 
 }

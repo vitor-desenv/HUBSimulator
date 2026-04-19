@@ -9,26 +9,29 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "products")
+@Table(name = "users")
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class Product {
+@AllArgsConstructor
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long userId;
+
+    private String userName;
 
     @Column(unique = true)
-    private String productSku;
+    private String email;
 
-    private String title;
-    private String description;
-    private String ncm;
-    private Integer stockOn;
-    private String warrantyTime;
+    private String password;
+    private Boolean isActive;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    @ManyToOne
+    @JoinColumn(name = "department_id")
+    private Department department;
 
 }
