@@ -1,5 +1,6 @@
 package dev.integration.hub.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,8 +28,21 @@ public class Department {
 
     @ManyToOne
     @JoinColumn(name = "enterprise_id")
+    @JsonBackReference
     private Enterprise enterprise;
 
     @OneToMany(mappedBy = "department")
     private List<User> users;
+
+    @PrePersist
+    public void prePersist(){
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate(){
+        this.updatedAt = LocalDateTime.now();
+    }
+
 }

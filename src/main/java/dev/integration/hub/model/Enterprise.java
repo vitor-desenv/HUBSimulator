@@ -1,5 +1,6 @@
 package dev.integration.hub.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,11 +26,23 @@ public class Enterprise {
     @Column(unique = true)
     private String document;
 
-    private Boolean contractActive;
+    private Boolean contractActive = true;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "enterprise")
+    @JsonManagedReference
     private List<Department> departament;
+
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 
 }
