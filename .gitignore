@@ -34,3 +34,4 @@ build/
 
 # Arquivos sensíveis (config local)
 src/main/resources/application.yaml
+

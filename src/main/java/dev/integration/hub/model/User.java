@@ -1,11 +1,13 @@
 package dev.integration.hub.model;
 
+import dev.integration.hub.enuns.UserRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
@@ -34,18 +36,32 @@ public class User implements UserDetails {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
+
     @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;
 
+    public User(String email, String password, UserRole role){
+        this.email =  email;
+        this.password = password;
+        this.role = role;
+    }
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+
+        if(this.role == UserRole.ADMIN) {
+            return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_ASSISTANT"));
+        }else
+            return List.of(new SimpleGrantedAuthority("ROLE_ASSISTANT"));
     }
 
     @Override
     public String getUsername() {
-        return "";
+        return this.email;
     }
 
     @Override
